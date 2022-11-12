@@ -1,2 +1,24 @@
-docker build -t shuvankar/medical-report-service:v1.0 .
-docker run -p 8091:8080 shuvankar/medical-report-service:v1.0
+# Create docker container
+docker build -t shuvankar/medical-report-service:v2.0 .
+docker run -p 8094:8080 shuvankar/medical-report-service:v2.0
+
+# Start minikube services
+minikube start
+
+# Use the local docker image
+minikube docker-env
+minikube docker-env | Invoke-Expression
+
+# Load the image inside minikube for local development only.
+minikube image load shuvankar/medical-report-service:v2.0
+
+# Deploy the services in kubernetes.
+kubectl apply -f kube/app-deployment.yaml
+kubectl get deployments
+kubectl get services
+
+# Run the service
+minikube service medical-report-service
+
+# Delete the deployment
+kubectl delete -f kube/app-deployment.yaml
